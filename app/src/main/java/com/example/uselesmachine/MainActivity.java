@@ -16,6 +16,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonSelfDestruct;
     private Switch Switch;
     private ConstraintLayout constraintLayout;
+    private Button buttonLookBusy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,27 +32,32 @@ public class MainActivity extends AppCompatActivity {
         buttonSelfDestruct = findViewById(R.id.button_main_self_destruct);
         Switch = findViewById(R.id.switch_onoff);
         constraintLayout = findViewById(R.id.constraint_layout_main);
+        buttonLookBusy = findViewById(R.id.button_main_lookBusy);
+
 
     }
     private void setListeners() {
+
         Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked) {
-                    new CountDownTimer(2000, 10) {
+                    new CountDownTimer(300, 100) {
                         @Override
                         public void onTick(long l) {
                             if(!Switch.isChecked())
-                                cancel();
+                               cancel();
                         }
 
                         @Override
                         public void onFinish() {
                             Switch.setChecked(false);
-                            finish();
+
 
                         }
-                    };
+
+                    }.start();
+
                 }
             }
         });
@@ -64,21 +70,20 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new CountDownTimer(10000,1000) {
-
+                    int x = 10;
+                    private int r = 50;
                     @Override
                     public void onTick(long l) {
+                        x--;
+                        buttonSelfDestruct.setText(String.valueOf(x));
 
-
-
-                    changebackgroundcolor();
-                    }
-
-                    private void changebackgroundcolor() {
-
-                        int r =+ 100;
+                        r += 20;
                         int color = Color.rgb(r, 0, 0);
                         constraintLayout.setBackgroundColor(color);
+
                     }
+
+
 
                     @Override
                     public void onFinish() {
@@ -87,6 +92,28 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }.start();
 
+            }
+        });
+        buttonLookBusy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                buttonLookBusy.setVisibility(View.GONE);
+              }
+            {
+                new CountDownTimer(1000,100) {
+                    // set the button to invisible on click
+                    @Override
+                    public void onTick(long l) {
+
+
+                    }
+
+                    @Override
+                    public void onFinish() {
+
+                    }
+                };
             }
         });
     }
