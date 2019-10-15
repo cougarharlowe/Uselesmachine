@@ -9,14 +9,16 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Switch;
 
 public class MainActivity extends AppCompatActivity {
 
     private Button buttonSelfDestruct;
-    private Switch Switch;
+    private Switch uselessSwitch;
     private ConstraintLayout constraintLayout;
     private Button buttonLookBusy;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,28 +32,29 @@ public class MainActivity extends AppCompatActivity {
 
     private void wireWidgets() {
         buttonSelfDestruct = findViewById(R.id.button_main_self_destruct);
-        Switch = findViewById(R.id.switch_onoff);
+        uselessSwitch = findViewById(R.id.switch_onoff);
         constraintLayout = findViewById(R.id.constraint_layout_main);
         buttonLookBusy = findViewById(R.id.button_main_lookBusy);
+        progressBar = findViewById(R.id.progressBar_main_busyBar);
 
 
     }
     private void setListeners() {
 
-        Switch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        uselessSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 if(isChecked) {
                     new CountDownTimer(300, 100) {
                         @Override
                         public void onTick(long l) {
-                            if(!Switch.isChecked())
+                            if(!uselessSwitch.isChecked())
                                cancel();
                         }
 
                         @Override
                         public void onFinish() {
-                            Switch.setChecked(false);
+                            uselessSwitch.setChecked(false);
 
 
                         }
@@ -97,23 +100,31 @@ public class MainActivity extends AppCompatActivity {
         buttonLookBusy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                progressBar.setVisibility(View.VISIBLE);
+                buttonSelfDestruct.setVisibility(View.GONE);
+                uselessSwitch.setVisibility(View.GONE);
                 buttonLookBusy.setVisibility(View.GONE);
-              }
-            {
-                new CountDownTimer(1000,100) {
-                    // set the button to invisible on click
+                new CountDownTimer(10000, 100){
+
+                    int progress = 1;
                     @Override
                     public void onTick(long l) {
+                        progressBar.setProgress(progress);
+                        progress++;
 
 
                     }
 
                     @Override
                     public void onFinish() {
+                        progressBar.setVisibility(View.GONE);
+                        buttonSelfDestruct.setVisibility(View.VISIBLE);
+                        uselessSwitch.setVisibility(View.VISIBLE);
+                        buttonLookBusy.setVisibility(View.VISIBLE);
 
                     }
-                };
+                }.start();
+
             }
         });
     }
